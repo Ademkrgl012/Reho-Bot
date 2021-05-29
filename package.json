@@ -1,5 +1,5 @@
 {
-  "name": "database",
+  "name": "rechardbot",
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
@@ -10,11 +10,23 @@
   "license": "ISC",
   "dependencies": {
     "@discordjs/opus": "^0.5.0",
-    "discord.js": "^12.5.3",
+    "canvas": "^2.7.0",
+    "chalk": "^4.1.1",
+    "common-tags": "^1.8.0",
+    "dbd.js": "^3.0.6",
+    "discord-buttons": "^2.4.1",
+    "discord-buttons-pe": "^1.0.3-beta",
+    "discord.js": "^12.3.1",
     "discordjs-ytdl-advanced": "^0.1.6",
     "express": "^4.17.1",
     "functions": "^1.0.9",
+    "moment": "^2.29.1",
+    "moment-duration-format": "^2.3.2",
+    "ms": "^2.1.3",
+    "node-fetch": "^2.6.1",
+    "node-superfetch": "^0.2.3",
     "quick.db": "^7.1.3",
-    "wio.db": "^3.0.9"
+    "wio.db": "^3.0.9",
+    "ytdl-core": "^4.8.0"
   }
 }

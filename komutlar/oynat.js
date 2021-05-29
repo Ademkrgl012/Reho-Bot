@@ -15,10 +15,13 @@ async run (client, message, args){
     const embed = new MessageEmbed()
     .addField("🎵 Şarkı Adı", `\n**${şarkı.title}**\n`)
     .setImage(şarkı.thumbnail)
-    .addField("📀Şarkı Kanalı", `\n**${şarkı.channel}**\n`)
+    .addField("<:youtube:826339844145807380>Şarkı Kanalı", `\n**${şarkı.channel}**\n`)
     .addField(":timer:Şarkı Süresi", `\n**${şarkı.time}**\n`)
     .setColor('RANDOM')
-    message.channel.send(embed)
-  }
+message.channel.send(embed)
+şarkı.on('finish', () => {
+  return message.channel.send('Şarkı Bittiği Için Sesli Odadan Çıktım')
+})
+}
 }
 }

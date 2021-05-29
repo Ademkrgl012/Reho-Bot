@@ -6,7 +6,7 @@ module.exports = {
 			.setTitle('Avatarınız Aşağıda')
 			.setColor('RANDOM')
 			.setImage(message.author.displayAvatarURL({ dynamic: true, format: 'png', size: 1024}))
-			.setFooter(`${message.author.tag} tarafından istendi.`, message.author.avatarURL())
+			.setFooter(`${message.author.tag}, Tarafından İstendi.`, message.author.avatarURL())
  message.channel.send(embed);
 	}
 }
