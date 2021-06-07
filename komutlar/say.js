@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const { oneLine, stripIndents } = require('common-tags');
 module.exports = {
-  kod: "say",
+  name: "say",
 async run(client, message, args){
 
 if(!["31D"].some(role => message.member.roles.cache.get(role)) && (!message.member.hasPermission("ADMINISTRATOR"))) 

@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 module.exports = {
-  kod: "token",
+  name: "token",
 async run(client, message, params){
     if (!message.guild) {
     const ozelmesajuyari = new MessageEmbed()

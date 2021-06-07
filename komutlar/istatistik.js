@@ -3,7 +3,7 @@ const moment = require("moment");
 const os = require("os");
 require("moment-duration-format");
 module.exports = {
-  kod: "istatistik",
+  name: "istatistik",
 async run(client, message, args){
   const seksizaman = moment
     .duration(client.uptime)

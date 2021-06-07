@@ -1,11 +1,18 @@
 const Discord = require("discord.js");
-
+const db = require('quick.db')
 module.exports = {
   kod: "yardım",
 async run(client, message, args){
 
     //Oyuncular Şehri - ArdaDemr;
     //Gerekli komutları sizin doldurmanız gerek
+ if(!message.guild){
+   var prefix = "r!"
+ }else if(db.has("prefix" + message.guild.id)){
+  var prefix = db.fetch("prefix" + message.guild.id)
+ }else{
+   var prefix = "r!"
+ }
 
 var page = 0;
  
@@ -18,20 +25,26 @@ arr.push(on.toString())
 
 let embd = new Discord.MessageEmbed()
 message.channel.send(embd
-.setTitle('Rechard Bot Yardım Menüsü')
+.setTitle('**  » Rechard Bot**')
 .setDescription(arr[0])
+.setImage('https://cdn.discordapp.com/attachments/847971838633312276/849105429769355274/standard.gif')
 .setColor('RANDOM')
 .setFooter(`Ana Menüye Dönmek İçin 🔄 Tepkisine Tıkla`, message.author.avatarURL())
 .setDescription(`
-<a:ok:842891116805226517> 👤|Kullanıcı Komutları»Kullanıcıların Kullanabileceği Komutları Gösterir!
+**» Bağlantılar**
+**[Destek Sunucusu](https://discord.gg/jSUTTWrrqh)** **•** **[Botu Davet Et](https://discord.com/api/oauth2/authorize?client_id=849023095447748608&permissions=8&scope=bot)** **•**
+Bir Komut Hakkında Detaylı __Yardım İçin__:
+**${prefix}yardım**
 
-<a:ok:842891116805226517> 🛠|Yetkili Komutları»Sadece Yetkililerin Kullanabileceği Komutları Gösterir!
+> 👤|Kullanıcı Komutları»Kullanıcıların Kullanabileceği Komutları Gösterir
 
-<a:ok:842891116805226517>️ ⚙️|Ayarlamalı Komutlar»Sadece Yöneticilerin Kullanabileceği Komutları Gösterir
+> 🛠|Yetkili Komutları»Sadece Yetkililerin Kullanabileceği Komutları Gösterir!
 
-<a:ok:842891116805226517> 🎶|Müzik Komutları»Herkesin Kullanabileceği Müzik Komutlarını Gösterir!
+> ⚙️|Ayarlamalı Komutlar»Sadece Yöneticilerin Kullanabileceği Komutları Gösterir
 
-<a:ok:842891116805226517> ⚔️|Eğlence Komutları»Herkesin Kullanabileceği Eğlence Komutlarını Gösterir
+> 🎶|Müzik Komutları»Herkesin Kullanabileceği Müzik Komutlarını Gösterir!
+
+> ⚔️|Eğlence Komutları»Herkesin Kullanabileceği Eğlence Komutlarını Gösterir
 `)).then(async msg => {
       await msg.react("👤");
       await msg.react("🛠");
@@ -53,20 +66,25 @@ message.channel.send(embd
             --page
 
               embd.setColor("RANDOM");
-              embd.setTitle('Rechard Bot Yardım Menüsü')
+              embd.setImage('https://cdn.discordapp.com/attachments/847971838633312276/849105429769355274/standard.gif')
+              embd.setTitle('**  » Rechard Bot**')
               embd.setFooter(`Ana Menüye Dönmek İçin 🔄 Tepkisine Tıkla`, message.author.avatarURL())
               embd.setDescription
               (`
-<a:ok:842891116805226517> 👤|Kullanıcı Komutları»Kullanıcıların Kullanabileceği Komutları Gösterir!
+**» Bağlantılar**
+**[Destek Sunucusu](https://discord.gg/jSUTTWrrqh)** **•** **[Botu Davet Et](https://discord.com/api/oauth2/authorize?client_id=849023095447748608&permissions=8&scope=bot)** **•**
+Bir Komut Hakkında Detaylı __Yardım İçin__:
+**${prefix}yardım**
 
-<a:ok:842891116805226517> 🛠|Yetkili Komutları»Sadece Yetkililerin Kullanabileceği Komutları Gösterir!
+> 👤|Kullanıcı Komutları»Kullanıcıların Kullanabileceği Komutları Gösterir!
 
-<a:ok:842891116805226517> ⚙️|Ayarlamalı Komutlar»Sadece Yöneticilerin Kullanabileceği Komutları Gösterir!
+> 🛠|Yetkili Komutları»Sadece Yetkililerin Kullanabileceği Komutları Gösterir!
 
+> ⚙️|Ayarlamalı Komutlar»Sadece Yöneticilerin Kullanabileceği Komutları Gösterir!
 
-🎶|Müzik Komutları»Herkesin Kullanabileceği Müzik Komutlarını Gösterir!
+> 🎶|Müzik Komutları»Herkesin Kullanabileceği Müzik Komutlarını Gösterir!
 
-⚔️|Eğlence Komutları»Herkesin Kullanabileceği Eğlence Komutlarını Gösterir!
+> ⚔️|Eğlence Komutları»Herkesin Kullanabileceği Eğlence Komutlarını Gösterir!
               `)
             msg.edit(embd)
            break;
@@ -77,9 +95,9 @@ message.channel.send(embd
               embd.setTitle(`Rechard Bot Kullanıcı Komutları`)
               embd.setColor("RANDOM");
               embd.setDescription(`
-> 👤|r!afk: Afk Olursunuz.
+> 👤|${prefix}afk: Afk Olursunuz.
 
-> 👤|r!avatar: Avatarınızı Gösterir.
+> 👤|${prefix}avatar: Avatarınızı Gösterir.
               `)
             msg.edit(embd)
           break;
@@ -102,13 +120,19 @@ message.channel.send(embd
             embd.setColor('RANDOM')
             embd.setFooter(`Ana Menüye Dönmek İçin 🔄 Tepkisine Tıkla`, message.author.avatarURL())
             embd.setDescription(`
-⚙️|r!sa-as: Oto sa-ası Ayarlarsınız
+⚙️|${prefix}sa-as: Oto sa-ası Ayarlar.
 
-⚙️|r!prefix: Botun Prefixini Ayarlarsınız
+⚙️|${prefix}prefix-ayarla: Botun Prefixini Ayarlar.
 
-⚙️|r!yetkili-etiket: Normal Üyelerin Yetkilileri Etiketlemesini Engellersiniz
+⚙️|${prefix}yetkili-etiket: Üyelerin Yetkilileri Etiketlemesini Engeller
 
-⚙️|r!reklam-engel: Yönetici Yetkisine Sahip Olmayan Üyelerin Reklam Yapmasını Engellersiniz
+⚙️|${prefix}reklam-engel: Yönetici Yetkisine Sahip Olmayan Üyelerin Reklam Yapmasını Engeller.
+
+⚙️|${prefix}gç-ayarla: Resimli Giriş Çıkışı Ayarlar.
+
+⚙️|${prefix}gç-sıfırla: Resimli Giriş Çıkışı Kapatır.
+
+⚙️|${prefix}capslock-engel: Üyelerin Büyük Harf Kullanmasını Engeller.
 `)
             msg.edit(embd)
             break;
@@ -120,9 +144,19 @@ message.channel.send(embd
             embd.setTitle('Rechard Bot Müzik Komutları')
             embd.setColor('RANDOM')
             embd.setDescription(`
-🎶|r!oynat: İsmini Yazdığınız Şarkıyı Çalar
+🎶|${prefix}çal: İsmini Yazdığınız Şarkıyı Çalar.
 
-🎶|r!ayrıl: Botu Ses Kanalından Çıkartırsınız
+🎶|${prefix}durdur: Çalınan Şarkıyı Durdurur.
+
+🎶|${prefix}devam: Durdurulan Şarkıyı Devam Ettirir.
+
+🎶|${prefix}atla: Çalınan Şarkıyı Geçer.
+
+🎶|${prefix}kuyruk: Şarkı Kuyruğunu Gösterir.
+
+🎶|${prefix}np: Çalınan Şarkıyı Gösterir.
+
+🎶|${prefix}ayrıl: Botu Ses Kanalından Çıkartırsınız.
             `)
             msg.edit(embd)
             break;
@@ -134,13 +168,12 @@ message.channel.send(embd
             embd.setTitle('Rechard Bot Eğlence Komutları')
             embd.setColor('RANDOM')
             embd.setDescription(`
-⚔️|r!token: Botun Tokenini Öğrenirsiniz
+⚔️|${prefix}token: Botun Tokenini Öğrenirsiniz
 
-⚔️|r!korona: Türkiyenin Korona Tablosunu Gösterir
+⚔️|${prefix}korona: Türkiyenin Korona Tablosunu Gösterir
             `)
             msg.edit(embd)
         }
       });
-    })
-}
-}
+})
+}}

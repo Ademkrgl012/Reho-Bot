@@ -1,8 +1,8 @@
-const db = require('wio.db')
+const db = require('quick.db')
 const { MessageEmbed } = require('discord.js')
 module.exports = {
-  kod: "sa-as",
-  async run (client, message, args){
+  name: "sa-as",
+  async run(client, message, args){
     if (!message.member.hasPermission('MANAGE_MESSAGES')) return message.channel.send('Bu Komudu Kullanabilmek İçin `Mesajları Yönet` Yetkisine Sahip Olmalısın!')
     if (!args[0]) return message.channel.send('Lütfen `aç` Ya Da `kapat` Yazınız')
     let ayar = args[0].toLowerCase()

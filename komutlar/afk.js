@@ -1,8 +1,8 @@
 const Discord = require("discord.js");
-const db = require("wio.db");
+const db = require("quick.db");
 module.exports = {
-  kod: "afk",
-async run(client, message, args){
+  name: "afk",
+async execute(client, message, args){
     if(message.channel.type=="dm") return message.channel.send("Dm'de kullanılamaz.")
         if(message.author.username.startsWith("[AFK]")) return false;
         if(!message.member.guild.me.hasPermission("MANAGE_NICKNAMES")) return message.channel.send("Bu komut için ``İsimleri yönet`` yetkisine ihtiyacım var")

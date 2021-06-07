@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 module.exports = {
-  kod: "sunucu-bilgi",
+  name: "sunucu-bilgi",
 async run(client, message, args){
 
 function checkDays(date) {

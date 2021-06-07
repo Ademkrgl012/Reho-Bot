@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const Discord = require('discord.js');
 
 module.exports = {
-  kod: "korona",
+  name: "korona",
 async run(client, message, args){
 
 fetch(`https://covid19.mathdro.id/api/countries/tr`)

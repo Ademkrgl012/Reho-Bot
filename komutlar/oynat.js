@@ -5,7 +5,7 @@ module.exports = {
   
 
 kod: "oynat",
-async run (client, message, args){
+async run(client, message, args){
   if(!message.member.voice.channel) return message.channel.send('Bir Sesli Kanala Gir')
   if (!args[0]) return message.channel.send('Lütfen Bir Şarkı İsmi Girin!')
   if (message.member.voice.channel){

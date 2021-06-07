@@ -1,30 +1,151 @@
 const Discord = require('discord.js') // discord.js modülü tanımlıyoruz.
-const client = new Discord.Client();// client tanımalamsı
+const client = new Discord.Client();
+const { readdirSync } = require("fs");
+const { join } = require("path");
 const { MessageEmbed } = ('discord.js')
-const { readdirSync } = require('fs'); // tanımlamalar
-const { join } = require('path'); // tanımlamalar
 const express = require('express')
-const db = require("wio.db")
-const data = require("quick.db")
-const keep_alive = require('./keep_alive.js')
+const db = require("quick.db")
 const fs = require("fs");
-client.commands= new Discord.Collection(); // komutları alıyoruz
-
+ client.commands= new Discord.Collection(); // komutları alıyoruz
 const commandFiles = readdirSync(join(__dirname, "komutlar")).filter(file => file.endsWith(".js")); // Belli bir klasörden belli .js uzantılı dosyaları buluyor.
-
 for (const file of commandFiles) {
-    const command = require(join(__dirname, "komutlar", `${file}`));
-    client.commands.set(command.kod, command); // Komutları Ayarlıyoruz.
-}
-///////rechard sohbet
-client.on("message", message => {
-  if (!message.guild)return;
-  if (
-    message.content.toLowerCase() === "rechard nasılsın" || message.content.toLowerCase() === "rechard merhaba nasılsın"||
-    message.content.toLowerCase() === "@Rechard#4560 nasılsın"||
-    message.content.toLowerCase() === "<@!811648533115306034> merhaba nasılsın")
-    message.channel.send('İyi Sen?')
-})
+     const command = require(join(__dirname, "komutlar", `${file}`));
+     client.commands.set(command.kod, command); // Komutları Ayarlıyoruz.
+ }
+////////
+client.on("ready", async ready => {
+
+ console.log(`${client.user.tag} Adlı Botum Aktif`);
+
+ var randomMesajlar = [
+
+     "YAPIM AŞAMASINDA",
+     "r!yardım",
+     "r!davet",
+     "Sahibim: Adem BUT Yalnız Olan#1881"
+]
+setInterval(function() {
+var randomMesajlar1 = randomMesajlar[Math.floor(Math.random() * (randomMesajlar.length))]
+client.user.setActivity(`${randomMesajlar1}`);
+}, 2 * 2500);
+
+client.user.setStatus("idle");
+});
+
+/////////KOMUTLAR;
+
+
+///////CANVASLI-GİRIŞ-ÇIKIŞ
+client.on("guildMemberRemove", async member => {
+   //let resimkanal = JSON.parse(fs.readFileSync("./ayarlar/gç.json", "utf8"));
+   //const canvaskanal = member.guild.channels.cache.get(resimkanal[member.guild.id].resim);
+   if (db.has(`gçkanal_${member.guild.id}`) === false) return;
+   var canvaskanal = member.guild.channels.cache.get(db.fetch(`gçkanal_${member.guild.id}`));
+   if (!canvaskanal) return;
+
+   const request = require("node-superfetch");
+   const Canvas = require("canvas"),
+     Image = Canvas.Image,
+     Font = Canvas.Font,
+     path = require("path");
+
+   var randomMsg = ["Sunucudan Ayrıldı😪"];
+   var randomMsg_integer =
+     randomMsg[Math.floor(Math.random() * randomMsg.length)];
+
+   let msj = await db.fetch(`cikisM_${member.guild.id}`);
+   if (!msj) msj = `{uye}, ${randomMsg_integer}`;
+
+   const canvas = Canvas.createCanvas(960, 422);
+   const ctx = canvas.getContext("2d");
+
+   const background = await Canvas.loadImage("https://cdn.discordapp.com/attachments/847971841787691068/848937892579115028/PicsArt_05-31-05.54.36.jpg");
+   ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+
+   ctx.strokeStyle = "#74037b";
+   ctx.strokeRect(0, 0, canvas.width, canvas.height);
+
+   ctx.fillStyle = `#D3D3D3`;
+   ctx.font = `37px "Warsaw"`;
+   ctx.textAlign = "center";
+
+   let avatarURL = member.user.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 });
+   const { body } = await request.get(avatarURL);
+   const avatar = await Canvas.loadImage(body);
+
+   ctx.beginPath();
+   ctx.lineWidth = 4;
+   ctx.fill();
+   ctx.lineWidth = 4;
+   ctx.arc(485, 145, 100, 0, Math.PI * 2, true);
+   ctx.clip();
+   ctx.drawImage(avatar, 385, 45, 200, 200);
+
+   const attachment = new Discord.MessageAttachment(
+     canvas.toBuffer(),
+     "Rechard Bot-Güle-Güle.png"
+   );
+
+ canvaskanal.send(
+ msj.replace("{uye}", member).replace("{sunucu}", member.guild.name), attachment);
+     if (member.user.bot)
+       return canvaskanal.send(`${member.user.tag}, Adlı Bot Sunucudan Ayrıldı`);
+	    
+	  });
+	  
+client.on("guildMemberAdd", async member => {
+if (db.has(`gçkanal_${member.guild.id}`) === false) return;
+   var canvaskanal = member.guild.channels.cache.get(db.fetch(`gçkanal_${member.guild.id}`));
+	 
+   if (!canvaskanal || canvaskanal === undefined) return;
+const request = require("node-superfetch");
+   const Canvas = require("canvas"),
+     Image = Canvas.Image,
+     Font = Canvas.Font,
+     path = require("path");
+	 
+   var randomMsg = [`Sunucuya Katıldı😃`];
+   var randomMsg_integer =
+     randomMsg[Math.floor(Math.random() * randomMsg.length)];
+	 
+   let paket = await db.fetch(`pakets_${member.id}`);
+   let msj = await db.fetch(`cikisM_${member.guild.id}`);
+   if (!msj) msj = `{uye}, ${randomMsg_integer}`;
+const canvas = Canvas.createCanvas(960, 422);
+const ctx = canvas.getContext("2d");
+
+   const background = await Canvas.loadImage("https://cdn.discordapp.com/attachments/847971841787691068/848937892307009536/PicsArt_05-31-05.53.56.jpg");
+   ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+
+   ctx.strokeStyle = "#74037b";
+   ctx.strokeRect(0, 0, canvas.width, canvas.height);
+
+   ctx.fillStyle = `#ffffff`;
+   ctx.font = `37px "Warsaw"`;
+   ctx.textAlign = "center";
+
+   let avatarURL = member.user.displayAvatarURL({ format: 'png', dynamic: true, size: 1024 }) ;
+   const { body } = await request.get(avatarURL);
+const avatar = await Canvas.loadImage(body);
+
+   ctx.beginPath();
+   ctx.lineWidth = 4;
+   ctx.fill();
+   ctx.lineWidth = 4;
+   ctx.arc(485, 145, 100, 0, Math.PI * 2, true);
+   ctx.clip();
+   ctx.drawImage(avatar, 385, 45, 200, 200);
+
+   const attachment = new Discord.MessageAttachment(
+     canvas.toBuffer(),
+     "Rechard Bot-Hosgeldin.png"
+   );
+
+   canvaskanal.send(
+ msj.replace("{uye}", member).replace("{sunucu}", member.guild.name), attachment);
+   if (member.user.bot)
+     return canvaskanal.send(` ${member.user.tag}, Adlı Bot Sunucuya Katıldı!`);
+	  });
 ///////sa-as//////
 client.on("message", message => {
   if (!message.guild) return;
@@ -67,7 +188,7 @@ client.on("message", message => {
  message.content.toLowerCase().includes === ".party"||
  message.content.toLowerCase().includes === ".rf.gd"||
  message.content.toLowerCase().includes === ".az"){
-  if (!db.has("reklam" + message.guild.id)) return;
+  if (!db.has("reklam" + message.guild.id))
   if (!message.member.hasPermission("ADMINISTRATOR")){
     message.delete()
     message.reply('Bu Sunucuda Reklam Yapmana İzin Vermiyorum Devam Edersen Cezalandırılacaksın')
@@ -89,206 +210,54 @@ client.on("message", message => {
     }
   })
 });
-///////otorol////
-client.on("guildMemberAdd", async member => {
-        let sayac = JSON.parse(fs.readFileSync("./autorole.json", "utf8"));
-  let otorole =  JSON.parse(fs.readFileSync("./autorole.json", "utf8"));
-      let arole = otorole[member.guild.id].sayi
-  let giriscikis = JSON.parse(fs.readFileSync("./autorole.json", "utf8"));  
-  let embed = new Discord.MessageEmbed()
-    .setTitle('Otorol Sistemi')
-    .setDescription(`:loudspeaker: :inbox_tray:  @${member.user.tag}'a Otorol Verildi `)
-.setColor("GREEN")
-    .setFooter("XiR", client.user.avatarURL());
-
-  if (!giriscikis[member.guild.id].kanal) {
-    return;
-  }
-
-  try {
-    let giriscikiskanalID = giriscikis[member.guild.id].kanal;
-    let giriscikiskanali = client.guilds.cache.get(member.guild.id).channels.cache.get(giriscikiskanalID);
-    giriscikiskanali.send(`<a:sc_pembetik:825706830075658250>Hoşgeldin @${member} Rolün Başarıyla Verildi.`);
-  } catch (e) { // eğer hata olursa bu hatayı öğrenmek için hatayı konsola gönderelim.
-    return console.log(e)
-  }
-
+////////otorol
+client.on('guildMemberAdd', async member => {
+  let kanal1 = await db.fetch(`otorolkanal_${member.guild.id}`);
+     let rol1 = await db.fetch(`otorolrol_${member.guild.id}`);
+   let kanal = member.guild.channels.cache.get(kanal1)
+   let rol = member.guild.roles.cache.get(rol1)
+   if (!kanal) return;
+   if (!rol) return;
+   kanal.send(`${member} adlı kullanıcıya başarıyla **@${rol.name}** rolü verildi.:+1:`)
+   member.roles.add(rol)
 });
-//Kullanıcı sunucudan ayrıldığında ayarlanan kanala mesaj gönderelim.
-client.on("guildMemberAdd", async (member) => {
-      let autorole =  JSON.parse(fs.readFileSync("./autorole.json", "utf8"));
-      let role = autorole[member.guild.id].sayi
-
-      member.roles.add(role)
-
-
-
-
-});
-//XiR
+//////capslock
+client.on("message", async msg => {
+     if (msg.channel.type === "dm") return;
+       if(msg.author.bot) return;  
+         if (msg.content.length > 4) {
+          if (db.fetch(`capslock_${msg.guild.id}`)) {
+            let caps = msg.content.toUpperCase()
+            if (msg.content == caps) {
+              if (!msg.member.hasPermission("ADMINISTRATOR")) {
+                if (!msg.mentions.users.first()) {
+                  msg.delete()
+                  return msg.channel.send(`✋ ${msg.author}, Bu sunucuda, büyük harf kullanımı engellenmekte!`).then(m => m.delete(5000))
+      }
+        }
+}
+    }
+	    }
+ });
 /////////
 client.on("message", async message => {
 
     if(message.author.bot) return;
     if (!message.guild){
-      var prefix = "r!"
-    }else if (db.has("prefix" + message.guild.id)){
-      var prefix = db.fetch("prefix" + message.guild.id)
+      const PREFIX = "r!"
+    }else if (db.has("PREFIX" + message.guild.id)){
+      var PREFIX = db.fetch("PREFIX" + message.guild.id)
     } else {
-      var prefix = "r!"
+      const PREFIX = "r!"
     }
-    if(message.content.startsWith(prefix)) {
-        const args = message.content.slice(prefix.length).trim().split(/ +/);
+    if(message.content.startsWith(PREFIX)) {
+        const args = message.content.slice(PREFIX.length).trim().split(/ +/);
 
         const command = args.shift().toLowerCase();
          if(!client.commands.has(command)) return message.channel.send(`Komut dosyamda **${command}** adlı bir komut bulamadım.`);
-
-
-        try {
-            client.commands.get(command).run(client, message, args);
-
-        } catch (error){
-            console.error(error);
-        }
-    }
-});
-//////değişen oynuyor
-client.on("ready", async ready => {
-
-console.log(`${client.user.tag}! Adlı Bot Aktif`);
-
-var randomMesajlar = [
-
-    "YAPIM AŞAMASINDA",
-    "r!yardım",
-    "Sahibim: Adem BUT Yalnız Olan#1881"
-  ]
-
-
-
-setInterval(function() {
-    var randomMesajlar1 = randomMesajlar[Math.floor(Math.random() * (randomMesajlar.length))]
-    client.user.setActivity(`${randomMesajlar1}`);
-
-}, 2 * 2500);
-
-client.user.setStatus("dnd");
-});
-///////////////Afk/////
-client.on("message", async (message) => {
-
-    if (message.channel.type == "dm") return false;
-
-    let prefix = (await db.fetch(`prefix_${message.guild.id}`)) || "r!";
-
-    let kullanıcı = message.mentions.users.first() || message.author;
-    let afkdkullanıcı = await db.fetch(`afk_${message.author.id}`);
-    let afkkullanıcı = await db.fetch(`afk_${kullanıcı.id}`);
-    let sebep = afkkullanıcı;
-
-    if (message.author.bot) return;
-    if (message.content.includes(`${prefix}afk`)) return;
-
-    if (message.content.includes(`<@!${kullanıcı.id}>`)) {
-      if (afkdkullanıcı) {
-        message.channel.send(
-          `\`${message.author.tag}\` adlı kullanıcı artık AFK değil.`
-        );
-        db.delete(`afk_${message.author.id}`);
-      }
-      if (afkkullanıcı)
-        return message.channel.send(
-          `${message.author}\`${kullanıcı.tag}\` şu anda AFK. Sebep : \`${sebep}\``
-        );
-    }
-
-    if (!message.content.includes(`<@!${kullanıcı.id}>`)) {
-      if (afkdkullanıcı) {
-        let rMember = message.guild.members.cache.get(message.author.id);
-        var nic = db.get(`${message.author.id}nick`);
-        var nick = nic;
-        rMember.setNickname(nick);
-        message.reply(` adlı kullanıcı artık AFK değil.`);
-        db.delete(`afk_${message.author.id}`);
-      }
-    }
-  });
-//////////buton
-const disbut = require('discord-buttons')(client);
-
-client.on('message', async (message) => {
-    if (message.content.startsWith('!buton')) {
-        let button = new disbut.MessageButton()
-        .setStyle('red')
-        .setLabel('Hayır')
-        .setID('click_to_function') 
-
-        let button2 = new disbut.MessageButton()
-        .setStyle('green')
-        .setLabel('Evet') 
-        .setID('click_to_function2') 
-        
-
-        message.channel.send('Adem Reyzz Youtube Kanalına Abone Misin?', {
-            buttons:[
-                button,button2
-            ]
-        });
-    };
-});
-
-client.on('clickButton', async (button) => {
-  if (button.id === 'click_to_function') {
-    button.channel.send(`${button.clicker.member} Aaaa ne ka ayıp ne ka ayıp :( Küstüm`);
-  }
-    if (button.id === 'click_to_function2') {
-    button.channel.send(`${button.clicker.member} Teşekkürler adamsın :=)`);
-  }
-});
-
-//////////bewk youtube Kanalın
-client.on('message', async (message) => {
-    if (message.content.toLowerCase() === 'berkay') {
-        let button = new disbut.MessageButton()
-        .setStyle('red')
-        .setLabel('Hayır')
-        .setID('click_to_function') 
-
-        let button2 = new disbut.MessageButton()
-        .setStyle('green')
-        .setLabel('Evet') 
-        .setID('click_to_function2') 
-        
-
-        message.channel.send('Berkay Altok Youtube Kanalına Abone Misin?', {
-            buttons:[
-                button,button2
-            ]
-        });
-    };
-});
-
-client.on('clickButton', async (button) => {
-  if (button.id === 'click_to_function') {
-    button.channel.send(`${button.clicker.member} Aaaa ne ka ayıp ne ka ayıp :( Küstüm`);
-  }
-    if (button.id === 'click_to_function2') {
-    button.channel.send(`${button.clicker.member} Teşekkürler adamsın :=)`);
-  }
-});
-
-//////////tag alana role
-client.on("userUpdate", async(old, nev) => {
-if(old.username !== nev.username) {
-if(!nev.username.includes("𐘎") && client.guilds.cache.get("848173657745653810").members.get(nev.id).roles.cache.has("848173657745653810")) {
-client.guilds.cache.get("848173657745653810").members.get(nev.id).removeRole("848173657745653810")
-client.channels.get("846418964724580392").send('**${ nev}, "tagınızı yazın" tagını çıkardığı için `GÖREVLİLER` tarafından <@&848173657745653810> rolü alındı!**')
 }
-if(nev.username.includes("𐘎") && !client.guilds.cache.get("848173657745653810").members.get(nev.id).roles.has("848173657745653810")) {
-client.channels.get("846418964724580392").send('**${nev},"𐘎"tagını aldığı için Oyun Elitleri tarafından <@&848173657745653810> rolü verildi!**')
-client.guilds.cache.get("848173657745653810").members.get(nev.id).addRole("848173657745653810")
-}
-}
-})
-//////////
-client.login("ODExNjQ4NTMzMTE1MzA2MDM0.YC1QmQ.1mYTxJeWC48OyGwG-VMEfsz9aow");
+});
+
+
+/////////
+client.login("ODQ5MDIzMDk1NDQ3NzQ4NjA4.YLVIYA.nypmsJlXtt64HYJrPngoOHctCIU");

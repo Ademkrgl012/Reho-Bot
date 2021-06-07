@@ -1,8 +1,7 @@
 const Discord = require("discord.js");
-const ayarlar = require("../ayarlar.json");
 const db = require("quick.db");
 module.exports = {
-  kod: "gç-ayarla",
+  name: "gç-ayarla",
 async run(client, message, args){
   if (!message.member.hasPermission("MANAGE_GUILD")) return message.reply(`Bu Komutu Kullanabilmek İçin **Yönetici** İznine Sahip Olmalısın!`);
 
